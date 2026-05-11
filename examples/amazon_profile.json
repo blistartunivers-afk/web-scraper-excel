@@ -1,0 +1,86 @@
+{
+  "name": "Amazon Product Scraper",
+  "description": "Scrape product information from Amazon search results",
+  "url": "https://www.amazon.com/s?k=laptop",
+  "pages": 2,
+  "use_selenium": true,
+  "delay": 2,
+  "selectors": {
+    "container": "div.s-result-item",
+    "title": {
+      "selector": "h2.a-size-mini",
+      "type": "text",
+      "clean": [
+        ["\\n", " "],
+        ["\\s+", " "]
+      ]
+    },
+    "price": {
+      "selector": "span.a-offscreen",
+      "type": "text",
+      "clean": [
+        ["[^0-9.]", ""],
+        ["^0", ""]
+      ]
+    },
+    "rating": {
+      "selector": "span.a-icon-alt",
+      "type": "text",
+      "regex": "([0-9.]+)"
+    },
+    "review_count": {
+      "selector": "span.a-size-base.s-underline-text",
+      "type": "text",
+      "clean": [
+        ["[^0-9]", ""]
+      ]
+    },
+    "url": {
+      "selector": "a.a-link-normal",
+      "type": "href"
+    },
+    "image": {
+      "selector": "img.s-image",
+      "type": "src"
+    },
+    "badge": {
+      "selector": "span.a-badge-text",
+      "type": "text"
+    }
+  },
+  "pagination": {
+    "type": "css",
+    "next_button": "a.s-pagination-next",
+    "delay": 3
+  },
+  "output": {
+    "filename": "amazon_products_{timestamp}.xlsx",
+    "sheet_name": "Products",
+    "format": {
+      "header": {
+        "bold": true,
+        "background": "#FF9900",
+        "color": "#FFFFFF",
+        "font_size": 12
+      },
+      "columns": {
+        "title": {
+          "width": 60
+        },
+        "price": {
+          "number_format": "$#,##0.00",
+          "width": 15
+        },
+        "rating": {
+          "number_format": "0.0",
+          "width": 10
+        },
+        "review_count": {
+          "width": 15
+        }
+      }
+    }
+  },
+  "headless": true,
+  "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
+}
